@@ -23,6 +23,9 @@ public class LocationHelper implements LocationListener {
 
 	private Context mContext;
 	
+	public final static double LATITUDE  =   33.681278;
+	public final static double LONGITUDE = -117.891411;
+	
 	public LocationHelper(Context context){
 		mContext = context;
 	}
@@ -169,8 +172,11 @@ public class LocationHelper implements LocationListener {
         return convertToLatLng(location);	
 	}
 	
-	private LatLng convertToLatLng(Location location) {
-		return new LatLng(location.getLatitude(), location.getLongitude());
+	public LatLng convertToLatLng(Location location) {
+		double latitude = location.getLatitude() > 0 ? location.getLatitude() : LATITUDE;
+		double longitude = location.getLongitude() > 0 ? location.getLongitude() : LONGITUDE;
+
+		return new LatLng(latitude, longitude);
 	}
 
 	@Override

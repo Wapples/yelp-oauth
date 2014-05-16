@@ -1,4 +1,4 @@
-package com.yelpoauth.app.android.helpers;
+package com.yelpoauth.app.android.oauth;
 import org.scribe.model.Token;
 import org.scribe.builder.api.DefaultApi10a;
 

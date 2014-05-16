@@ -29,8 +29,8 @@ public class U {
 	
 	// name of SharedPreferences object    
     FragmentManager fm;
-
-	public static Location getCurrentLocation(Context context) {
+    
+    public static Location getCurrentLocation(Context context) {
 		LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		Criteria c = new Criteria();
 		String provider = lm.getBestProvider(c, true);
@@ -48,6 +48,46 @@ public class U {
 			}
 		}
 		return location;
+	}
+    
+	/**
+	 * Make an HTTP GET request to the given URL and return a JSONObject.
+	 * @param url
+	 * @return JSONObject
+	 */
+	public static JSONObject getObject(String rawJSON) {
+		String contentString;
+		JSONObject j = null;
+
+		try {
+			contentString = rawJSON;
+			if (contentString != null) {
+				j = new JSONObject(contentString);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return j;
+	}
+
+
+	public static JSONArray getArray(String rawJSON) {
+		String contentString;
+		JSONArray j = null;
+
+		try {
+			contentString = rawJSON;
+			if (contentString != null) {
+				j = new JSONArray(contentString);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return j;
 	}
 	
 	/**
