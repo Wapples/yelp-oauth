@@ -21,9 +21,44 @@ public class Query extends Model {
 		super();
 		this.query = queryString;
 	}
+	
+	 public List<Image> queries() {
+	        return getMany(Image.class, "Query");
+	 }
 	 
 	 public String getQuery(){
 		 return query;
 	 }
-	 	 
+	 
+	 public static void storeQuery(String queryString) {
+			Query query = new Query(queryString);
+			query.save();
+	 }
+	 
+	 public static List<Query> getQueryList(int limit) {
+	      return new Select().from(Query.class).orderBy("id DESC").limit("" + limit).execute();
+	 }
+	 
+	 public static List<Query> getAllQueries(){
+		 return new Select().from(Query.class).orderBy("id DESC").execute();
+	 }
+	 
+	 public static List<Query> recentItems() {
+	      return new Select().from(Query.class).orderBy("id DESC").limit("300").execute();
+	 }
+	 
+	 public static Query getLastStoredItem(){
+		 return new Select().from(Query.class).orderBy("id DESC").executeSingle();
+	 }
+	 
+	 public static void populateQueryList(int queryCount){
+		 for (int i = 0; i < queryCount; i++){
+			 Query.storeQuery(i + "query");
+		 }
+	 }
+	 
+	 public static void deleteAll(){
+		 new Delete().from(Query.class).execute();
+	 }
+	 
 }
