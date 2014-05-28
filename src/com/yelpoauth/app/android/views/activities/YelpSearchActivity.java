@@ -26,6 +26,8 @@ import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.adapters.ImageAdapter;
 import com.yelpoauth.app.android.helpers.GoogleImageClient;
 import com.yelpoauth.app.android.helpers.U;
+import com.yelpoauth.app.android.models.Business;
+import com.yelpoauth.app.android.models.BusinessFactory;
 import com.yelpoauth.app.android.models.Image;
 import com.yelpoauth.app.android.models.Query;
 import com.yelpoauth.app.android.oauth.VolleyYelpClient;
@@ -93,6 +95,7 @@ public class YelpSearchActivity extends Activity {
 								userLocation.getLongitude() + "", 
 								yelpResponseSuccessListener(), 
 								yelpErrorListener());
+		Query.storeQuery(query);
 	}
 	
 	private void loadMore() {
@@ -128,8 +131,10 @@ public class YelpSearchActivity extends Activity {
 		return new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
-				Log.i("RESPONSE", "response" + response.toString());
 				setProgressBarIndeterminateVisibility(false);
+				List<Business> businessList = BusinessFactory.getBusinessList(response);
+				Business.storeAll(businessList);
+				Log.i("BUSINESS LIST", "Stored length: " + Business.getAll().size());
 			}
 		};
 	}
