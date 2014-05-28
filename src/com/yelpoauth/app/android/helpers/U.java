@@ -2,6 +2,7 @@ package com.yelpoauth.app.android.helpers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -197,6 +198,30 @@ public class U {
 			jo = new JSONObject();
 		}
 		return jo;
+	}
+	
+	public static ArrayList<String> getStringArrayList(JSONArray input){
+		ArrayList<String> stringArray = new ArrayList<String>();
+		for (int i = 0; i < input.length(); i++){
+			try {
+				stringArray.add(input.getString(i));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		return stringArray;
+	}
+	
+	public static String getStringFromArray(JSONArray input){
+		String ret = "";
+		for (int i = 0; i < input.length(); i++){
+			try {
+				ret += " " + input.getString(i);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		return ret;
 	}
 	
 	public static void clearImage(ImageView v){

@@ -27,8 +27,9 @@
             android:name="com.yelpoauth.app.android.views.activities.QueryHistoryActivity"
             android:parentActivityName="com.yelpoauth.app.android.views.activities.GoogleImageSearchVolleyActivity" >
         </activity>
-        <activity
-            android:name="com.yelpoauth.app.android.views.activities.GoogleImageSearchVolleyActivity" >
+        <activity android:name="com.yelpoauth.app.android.views.activities.GoogleImageSearchVolleyActivity" >
+        </activity>
+        <activity android:name="com.yelpoauth.app.android.views.activities.ListingDetailActivity" >
         </activity>
 
         <meta-data
@@ -39,7 +40,7 @@
             android:value="Yelp.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="2" />
+            android:value="5" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

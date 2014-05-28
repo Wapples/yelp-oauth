@@ -1,5 +1,7 @@
 package com.yelpoauth.app.android.models;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,21 +11,8 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
 @Table(name = "Businesses")
-public class Business extends Model{
+public class Business  extends Model implements Serializable {
 	public static String QUERY = "query";
-	public static String ID = "id";
-	public static String NAME = "name";
-	public static String IMAGE_URL = "imageUrl";
-	public static String URL = "url";
-	public static String MOBILE_URL = "mobile_url";
-	public static String PHONE = "phone";
-	public static String DISPLAY_PHONE = "displayPhone";
-	public static String REVIEW_COUNT = "reviewCount";
-	public static String DISTANCE = "distance";
-	public static String RATING = "rating";
-	public static String SNIPPET_TEXT = "snippetText";
-	public static String RATING_IMAGE_URL = "ratingImageUrl";
-
 	
 	@Column(name = "Query")
 	public Query query;
@@ -40,6 +29,18 @@ public class Business extends Model{
 	@Column(name = "url")
 	public String url;
 	
+	@Column(name = "state")
+	public String state;
+	
+	@Column(name = "city")
+	public String city;
+	
+	@Column(name = "zip")
+	public String zip;
+	
+	@Column(name = "country")
+	public String country;
+	
 	@Column(name = "mobileUrl")
 	public String mobileUrl;
 	
@@ -50,50 +51,73 @@ public class Business extends Model{
 	public String displayPhone;
 	
 	@Column(name = "reviewCount")
-	public int reviewCount;
+	public Integer reviewCount;
 	
 	@Column(name = "distance")
-	public int distance;
+	public Double distance;
 	
 	@Column(name = "rating")
-	public double rating;
+	public Double rating;
 	
 	@Column(name = "snippetText")
 	public String snippetText;
 	
 	@Column(name = "ratingImageUrl")
 	public String ratingImageUrl;
-
 	
+	@Column(name = "isClosed")
+	public Boolean isClosed;
+	
+	@Column(name = "latitude")
+	public Boolean latitude;
+	
+	@Column(name = "longitude")
+	public Boolean longitude;
+	
+	@Column(name = "streetAddress")
+	public String streetAddress;
+	
+	@Column(name = "categories")
+	public ArrayList<String> categories;
+
 	public Business(){
 			super();
-			
 	}
 	
-	public void storeSingle(Map<String, Object> constructorMap){
-		Business business = new Business();
-		business.query = (Query) constructorMap.get(QUERY);
-		business.yelpId = (String) constructorMap.get(ID);
-		business.name = (String) constructorMap.get(NAME);
-		business.imageUrl = (String) constructorMap.get(IMAGE_URL);
-		business.url = (String) constructorMap.get(URL);
-		business.mobileUrl = (String) constructorMap.get(MOBILE_URL);
-		business.phone = (String) constructorMap.get(PHONE);
-		business.displayPhone = (String) constructorMap.get(DISPLAY_PHONE);
-		business.reviewCount = (Integer) constructorMap.get(REVIEW_COUNT);
-		business.distance = (Integer) constructorMap.get(DISTANCE);
-		business.rating = (Double) constructorMap.get(RATING);
-		business.snippetText = (String) constructorMap.get(SNIPPET_TEXT);
-		business.ratingImageUrl = (String) constructorMap.get(RATING_IMAGE_URL);
-		business.save();
+	public static void storeAll(List<Business> input){
+		for(Business business : input){
+			if (!contains(business.name)){
+				business.save();
+			}
+		}
 	}
 
-	public static List<Business> getAll(Query query) {
+	public static List<Business> getAllByQuery(Query query) {
 	    return new Select()
 	        .from(Business.class)
 	        .where(QUERY + "= ?", query.getId())
-	        .orderBy(NAME +"ASC")
+	        .orderBy(BusinessFactory.NAME +" ASC")
 	        .execute();
+	}
+	
+	public static List<Business> getAll() {
+	    return new Select()
+	        .from(Business.class)
+	        .orderBy(BusinessFactory.DISTANCE + " ASC")
+	        .execute();
+	}
+	
+	public static Boolean contains(String name){
+		Boolean ret = false;
+		List<Business> list = new Select()
+	        .from(Business.class)
+	        .where(BusinessFactory.NAME + "= ?", name)
+	        .orderBy(BusinessFactory.DISTANCE + " ASC")
+	        .execute();
+		if (list.size() > 0){
+			ret = true;
+		}
+		return ret;
 	}
 	 
 
