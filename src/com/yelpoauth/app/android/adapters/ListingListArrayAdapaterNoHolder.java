@@ -21,83 +21,62 @@ import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.models.Business;
 import com.yelpoauth.app.android.views.activities.ListingDetailActivity;
 
-public class ListingListArrayAdapater extends ArrayAdapter<Business> {
-
-	private static class ViewHolder {
-		TextView addressView;
-		TextView titleView;
-		TextView hoursView;
-		TextView reviewCountView;
-		TextView distanceView;
-		ImageView avatarView;
-		ImageView ratingImageView;
-		Button callView;
-		Button directionsView;
-	}
-
+public class ListingListArrayAdapaterNoHolder extends ArrayAdapter<Business> {
 	public Location mUserLocation;
 
-	public ListingListArrayAdapater(Context context, List<Business> listings) {
+	public ListingListArrayAdapaterNoHolder(Context context, List<Business> listings) {
 		super(context, R.layout.kk_disp_list_view, listings);
 
 	}
 	
-	public ListingListArrayAdapater(Context context) {
+	public ListingListArrayAdapaterNoHolder(Context context) {
 		super(context, 0);
 
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// Get the data item for this position
-		// Check if an existing view is being reused, otherwise inflate the view
-		ViewHolder viewHolder; // view lookup cache stored in tag
 		Context context = getContext();
 		if (convertView == null) {
-			viewHolder = new ViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(getContext());
-			convertView = inflater.inflate(R.layout.kk_disp_list_view, null);
-			viewHolder.addressView = (TextView) convertView
-					.findViewById(R.id.tv_dispensary_address_list);
-			viewHolder.distanceView = (TextView) convertView
-					.findViewById(R.id.dispensary_distance_list);
-			viewHolder.hoursView = (TextView) convertView
-					.findViewById(R.id.dispensary_hours_list);
-			viewHolder.reviewCountView = (TextView) convertView
-					.findViewById(R.id.dispensary_reviews_list);
-			viewHolder.titleView = (TextView) convertView
-					.findViewById(R.id.dispensary_title_list);
-			viewHolder.avatarView = (ImageView) convertView
-					.findViewById(R.id.dispensary_avatar_list);
-			viewHolder.ratingImageView = (ImageView) convertView
-					.findViewById(R.id.iv_rating_list);
-			viewHolder.callView = (Button) convertView
-					.findViewById(R.id.dispensary_phone_list);
-			viewHolder.directionsView = (Button) convertView
-					.findViewById(R.id.dispensary_directions_list);
-
-			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
+			convertView = inflater.inflate(R.layout.kk_disp_list_view, null);	
 		}
+		
+		TextView addressView = (TextView) convertView
+				.findViewById(R.id.tv_dispensary_address_list);
+		TextView distanceView = (TextView) convertView
+				.findViewById(R.id.dispensary_distance_list);
+		TextView hoursView = (TextView) convertView
+				.findViewById(R.id.dispensary_hours_list);
+		TextView reviewCountView = (TextView) convertView
+				.findViewById(R.id.dispensary_reviews_list);
+		TextView titleView = (TextView) convertView
+				.findViewById(R.id.dispensary_title_list);
+		ImageView avatarView = (ImageView) convertView
+				.findViewById(R.id.dispensary_avatar_list);
+		ImageView ratingImageView = (ImageView) convertView
+				.findViewById(R.id.iv_rating_list);
+		Button callView = (Button) convertView
+				.findViewById(R.id.dispensary_phone_list);
+		Button directionsView = (Button) convertView
+				.findViewById(R.id.dispensary_directions_list);
 		Business business = getItem(position);
 		int distance = (int) business.distance.doubleValue();
 
-		viewHolder.addressView.setText(business.streetAddress);
-		viewHolder.distanceView.setText(distance + " mi");
+		addressView.setText(business.streetAddress);
+		distanceView.setText(distance + " mi");
 		// viewHolder.hoursView.setText(listing.hoursOpen + " - "
 		// + listing.hoursClose);
-		viewHolder.reviewCountView.setText(business.reviewCount + "");
-		viewHolder.titleView.setText(business.name);
-		viewHolder.callView.setOnClickListener(new CallClickListener(business,
+		reviewCountView.setText(business.reviewCount + "");
+		titleView.setText(business.name);
+		callView.setOnClickListener(new CallClickListener(business,
 				context));
 		convertView.setOnClickListener(new ListItemClickListener(business,
 				context));
 
+		ImageLoader.getInstance().displayImage(business.imageUrl, avatarView);
+		ImageLoader.getInstance().displayImage(business.ratingImageUrl, ratingImageView);
 		
-		ImageLoader.getInstance().displayImage(business.imageUrl, viewHolder.avatarView);
-		ImageLoader.getInstance().displayImage(business.ratingImageUrl, viewHolder.ratingImageView);
-
 		return convertView;
 	}
 

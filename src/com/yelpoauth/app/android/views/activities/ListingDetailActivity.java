@@ -15,11 +15,8 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.squareup.picasso.Picasso;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.models.Business;
 
@@ -109,15 +106,8 @@ public class ListingDetailActivity extends FragmentActivity {
 		tvAddress.setText(streetAddress);
 		tvAddress.setSelected(true);
 		tvPhone.setText("");
-		
-		 //replace with image loader
-        Picasso.with(mContext)
-        .load(b.ratingImageUrl)
-        .centerCrop()
-        .resize(256,  256)
-        .placeholder(R.drawable.placeholder)
-        .error(R.drawable.error)
-        .into(ivRating);
+        
+		ImageLoader.getInstance().displayImage(b.ratingImageUrl, ivRating);
 
 		trCall.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {

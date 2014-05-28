@@ -31,8 +31,8 @@
                 	android:orientation="vertical">
                 	<ImageView
                     	android:id="@+id/dispensary_avatar_list"
-                    	android:layout_width="88px"
-                    	android:layout_height="88px"
+                    	android:layout_width="100dp"
+                    	android:layout_height="100dp"
                     	 />
         	
                 	 <!--  com.loopj.android.image.SmartImageView
@@ -73,14 +73,15 @@
                     		style="?android:attr/ratingBarStyleSmall"
                     		android:layout_width="wrap_content"
                     		android:layout_height="18sp"
-                    		android:layout_marginTop="4sp"
                     		android:layout_marginRight="5sp"/>
-                		<TextView
-                    		android:id="@+id/dispensary_reviews_list"
-                    		android:layout_width="wrap_content"
-                    		android:layout_height="wrap_content"
-                    		android:text="reviews"
-                    		android:textColor="#b4b4b4" />
+
+               			<TextView
+               			    android:id="@+id/dispensary_reviews_list"
+               			    android:layout_width="wrap_content"
+               			    android:layout_height="wrap_content"
+               			    android:text="reviews"
+               			    android:textColor="#b4b4b4" />
+
                 		<TextView
                 			android:id="@+id/dispensary_distance_list"
                     		android:layout_width="fill_parent"

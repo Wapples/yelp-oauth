@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.activities.fragments.ListingListFragment;
 import com.yelpoauth.app.android.adapters.ImageAdapter;
+import com.yelpoauth.app.android.helpers.ApplicationConfig;
 import com.yelpoauth.app.android.helpers.GoogleImageClient;
 import com.yelpoauth.app.android.helpers.U;
 import com.yelpoauth.app.android.models.Business;
@@ -54,8 +55,8 @@ public class YelpSearchActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 	    requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
 		setContentView(R.layout.search_parent_layout);
-
 		mContext = this;
+
 		fm = getSupportFragmentManager();
 		searchFromHistoryActivity();
 	}	

@@ -3,7 +3,6 @@
  */
 package com.yelpoauth.app.android.activities.fragments;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,23 +14,21 @@ import android.app.ProgressDialog;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.adapters.ListingListArrayAdapater;
-import com.yelpoauth.app.android.adapters.ListingListArrayAdapaterNoHolder;
 import com.yelpoauth.app.android.helpers.U;
 import com.yelpoauth.app.android.models.Business;
 import com.yelpoauth.app.android.models.BusinessFactory;
@@ -76,9 +73,6 @@ public class ListingListFragment extends ListFragment {
 
 		mActivity = getActivity();
 		mUserLocation = U.getCurrentLocation(mActivity);
-
-		// List<Business> mData = (List<Business>) extras
-		// .getSerializable("business-list");
 
 		mSearchResultView = (TextView) v.findViewById(R.id.search_results);
 
