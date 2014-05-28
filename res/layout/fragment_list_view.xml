@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#ffffff" >
+	<RelativeLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="20sp"
+	    android:paddingLeft="5sp"> 
+	    
+	    <TextView 
+	        android:id="@+id/search_results"
+	        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+	        android:textColor="#21dfb0"
+	        android:textSize="14sp"
+	        android:text="# of results"/>
+	    
+	    <TextView 
+	        android:id="@+id/results_tag"
+	        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+	        android:textColor="#21dfb0"
+	        android:textSize="14sp"
+	        android:text="  Listings Returned"
+	        android:layout_toRightOf="@+id/search_results"/>	 
+	        
+	</RelativeLayout>
+
+	<ListView 
+    	android:id="@android:id/list"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:dividerHeight="2dp"
+    	android:layout_marginBottom="40dp"
+    	>
+    
+	</ListView>
+	<RelativeLayout 
+  		    android:id="@+id/ll_map_controls"
+  		    android:layout_height="40dp"
+  		    android:layout_width="match_parent"
+  		    android:orientation="horizontal"
+  		    android:background="#BF000000"
+  		    android:layout_marginTop="-40dp">
+ 
+  		    <TextView 
+  		        android:id="@+id/tv_list_filters"
+  		        android:layout_width="wrap_content"
+  		    	android:layout_height="wrap_content"
+  		    	android:text="Filter By: "
+  		    	android:textColor="#FFFFFF"
+  		    	android:textStyle="bold"
+  		    	android:layout_marginTop="10dp"
+  		    	android:layout_marginLeft="10dp"/>
+  		    
+  		     <TextView 
+  		        android:id="@+id/tv_list_filters_distance"
+  		        android:layout_width="wrap_content"
+  		    	android:layout_height="wrap_content"
+  		    	android:text="Distance"
+  		    	android:textColor="#FFFFFF"
+  		    	android:textStyle="bold"
+  		    	android:layout_marginTop="10dp"
+  		    	android:layout_marginLeft="10dp"
+  		    	android:layout_toRightOf="@id/tv_list_filters"/>
+  		     
+  		      <TextView 
+  		        android:id="@+id/tv_list_filters_rating"
+  		        android:layout_width="wrap_content"
+  		    	android:layout_height="wrap_content"
+  		    	android:text="Rating"
+  		    	android:textColor="#FFFFFF"
+  		    	android:textStyle="bold"
+  		    	android:layout_marginTop="10dp"
+  		    	android:layout_marginLeft="10dp"
+  		    	android:layout_toRightOf="@id/tv_list_filters_distance"/>
+  		      
+  		       <TextView 
+  		        android:id="@+id/tv_list_filters_reviews"
+  		        android:layout_width="wrap_content"
+  		    	android:layout_height="wrap_content"
+  		    	android:text="Reviews"
+  		    	android:textColor="#FFFFFF"
+  		    	android:textStyle="bold"
+  		    	android:layout_marginTop="10dp"
+  		    	android:layout_marginLeft="10dp"
+  		    	android:layout_toRightOf="@id/tv_list_filters_rating"/>
+  		    
+  		    
+  		</RelativeLayout>
+</LinearLayout>

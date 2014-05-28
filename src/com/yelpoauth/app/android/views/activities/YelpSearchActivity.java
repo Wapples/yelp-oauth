@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +26,7 @@ import android.widget.SearchView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.yelpoauth.app.android.R;
+import com.yelpoauth.app.android.activities.fragments.ListingListFragment;
 import com.yelpoauth.app.android.adapters.ImageAdapter;
 import com.yelpoauth.app.android.helpers.GoogleImageClient;
 import com.yelpoauth.app.android.helpers.U;
@@ -32,7 +36,7 @@ import com.yelpoauth.app.android.models.Image;
 import com.yelpoauth.app.android.models.Query;
 import com.yelpoauth.app.android.oauth.VolleyYelpClient;
 
-public class YelpSearchActivity extends Activity {
+public class YelpSearchActivity extends FragmentActivity {
 	public ImageAdapter mAdapter;
 	private GridView mGridView;
 	private String mCurrentQuery;
@@ -41,6 +45,7 @@ public class YelpSearchActivity extends Activity {
 	private ArrayList<Image> mImageList;
 	private YelpSearchActivity mContext;
 	private static String IMAGE_LIST_TAG = "image-list";
+	private FragmentManager fm;
 
 	/**
 	 * Called when the activity is first created.
@@ -49,22 +54,10 @@ public class YelpSearchActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
-		setContentView(R.layout.image_search_volley);
+		setContentView(R.layout.search_parent_layout);
 
 		mContext = this;
-		// grid view
-		mGridView = (GridView) findViewById(R.id.results);
-		mGridView.setNumColumns(3);
-
-		// set reference to adapter
-		mAdapter = new ImageAdapter(this);
-		mGridView.setAdapter(mAdapter);
-		
-		mEndlessListener = new EndlessScrollListener();
-		mGridView.setOnScrollListener(mEndlessListener);
-		
-		mClient = new GoogleImageClient();
-
+		fm = getSupportFragmentManager();
 		searchFromHistoryActivity();
 	}
 
@@ -90,7 +83,8 @@ public class YelpSearchActivity extends Activity {
 	
 	private void searchYelp(String query){
 		Location userLocation = U.getCurrentLocation(mContext);
-		VolleyYelpClient.search(query, 
+		VolleyYelpClient.search(query,
+								0,
 								userLocation.getLatitude() +"", 
 								userLocation.getLongitude() + "", 
 								yelpResponseSuccessListener(), 
@@ -132,9 +126,20 @@ public class YelpSearchActivity extends Activity {
 			@Override
 			public void onResponse(JSONObject response) {
 				setProgressBarIndeterminateVisibility(false);
+				
 				List<Business> businessList = BusinessFactory.getBusinessList(response);
 				Business.storeAll(businessList);
-				Log.i("BUSINESS LIST", "Stored length: " + Business.getAll().size());
+//				List<Business> storedBusinessList = Business.getAll();
+				
+				Bundle extras = new Bundle();
+				extras.putSerializable("business-list", (Serializable) businessList);
+				
+				ListingListFragment businessListFrag = new ListingListFragment();
+				businessListFrag.setArguments(extras);
+				
+				FragmentTransaction ft = fm.beginTransaction();
+				ft.replace(R.id.content_frame, businessListFrag);
+				ft.commit();
 			}
 		};
 	}

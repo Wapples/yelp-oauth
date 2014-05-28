@@ -212,6 +212,18 @@ public class U {
 		return stringArray;
 	}
 	
+	public static String getStringFromArray(JSONArray input){
+		String ret = "";
+		for (int i = 0; i < input.length(); i++){
+			try {
+				ret += " " + input.getString(i);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		return ret;
+	}
+	
 	public static void clearImage(ImageView v){
 		v.setVisibility(View.GONE);
 	}

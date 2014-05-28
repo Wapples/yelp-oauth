@@ -1,5 +1,6 @@
 package com.yelpoauth.app.android.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,7 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
 @Table(name = "Businesses")
-public class Business extends Model{
+public class Business  extends Model implements Serializable {
 	public static String QUERY = "query";
 	
 	@Column(name = "Query")
@@ -50,13 +51,13 @@ public class Business extends Model{
 	public String displayPhone;
 	
 	@Column(name = "reviewCount")
-	public int reviewCount;
+	public Integer reviewCount;
 	
 	@Column(name = "distance")
 	public Double distance;
 	
 	@Column(name = "rating")
-	public double rating;
+	public Double rating;
 	
 	@Column(name = "snippetText")
 	public String snippetText;
@@ -67,6 +68,15 @@ public class Business extends Model{
 	@Column(name = "isClosed")
 	public Boolean isClosed;
 	
+	@Column(name = "latitude")
+	public Boolean latitude;
+	
+	@Column(name = "longitude")
+	public Boolean longitude;
+	
+	@Column(name = "streetAddress")
+	public String streetAddress;
+	
 	@Column(name = "categories")
 	public ArrayList<String> categories;
 
@@ -76,7 +86,9 @@ public class Business extends Model{
 	
 	public static void storeAll(List<Business> input){
 		for(Business business : input){
-			business.save();
+			if (!contains(business.name)){
+				business.save();
+			}
 		}
 	}
 
@@ -93,6 +105,19 @@ public class Business extends Model{
 	        .from(Business.class)
 	        .orderBy(BusinessFactory.DISTANCE + " ASC")
 	        .execute();
+	}
+	
+	public static Boolean contains(String name){
+		Boolean ret = false;
+		List<Business> list = new Select()
+	        .from(Business.class)
+	        .where(BusinessFactory.NAME + "= ?", name)
+	        .orderBy(BusinessFactory.DISTANCE + " ASC")
+	        .execute();
+		if (list.size() > 0){
+			ret = true;
+		}
+		return ret;
 	}
 	 
 

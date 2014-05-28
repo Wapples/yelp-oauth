@@ -75,13 +75,13 @@ public class VolleyYelpClient {
 	 *            Longitude
 	 * @return JSON string response
 	 */
-	public static void search(String term, String latitude, String longitude,
+	public static void search(String term, int offset, String latitude, String longitude,
 			Listener<JSONObject> responseSuccessListener,
 			ErrorListener responseErrorListener) {
 
 		String requestUrl = String.format(
-				"http://api.yelp.com/v2/search?term=%s&ll=%s,%s",
-				Uri.encode(term), latitude + "", longitude + "");
+				"http://api.yelp.com/v2/search?term=%s&offset=%d&ll=%s,%s",
+				Uri.encode(term),offset, latitude + "", longitude + "");
 		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(
 				YelpCredentials.CONSUMER_KEY, YelpCredentials.CONSUMER_SECRET);
 		consumer.setMessageSigner(new HmacSha1MessageSigner());
