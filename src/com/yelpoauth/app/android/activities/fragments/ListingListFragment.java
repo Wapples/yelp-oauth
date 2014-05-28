@@ -31,11 +31,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.adapters.ListingListArrayAdapater;
+import com.yelpoauth.app.android.adapters.ListingListArrayAdapaterNoHolder;
 import com.yelpoauth.app.android.helpers.U;
 import com.yelpoauth.app.android.models.Business;
 import com.yelpoauth.app.android.models.BusinessFactory;
 import com.yelpoauth.app.android.oauth.VolleyYelpClient;
-import com.yelpoauth.app.android.views.activities.GoogleImageSearchVolleyActivity.EndlessScrollListener;
 
 /**
  * @author wapples
@@ -50,6 +50,7 @@ public class ListingListFragment extends ListFragment {
 	private FragmentManager fm;
 	private List<Business> mListingList;
 	private ListingListArrayAdapater mListAdapter;
+//	private ListingListArrayAdapaterNoHolder mListAdapter;
 	private Location mUserLocation;
 	private ProgressDialog progressDialog;
 
@@ -88,6 +89,8 @@ public class ListingListFragment extends ListFragment {
 		mListfilterReviews = (TextView) v
 				.findViewById(R.id.tv_list_filters_reviews);
 
+		mListAdapter = new ListingListArrayAdapater(mActivity);
+		
 		// Handler for distance filter
 		mListfilterDistance.setOnClickListener(new OnClickListener() {
 
@@ -120,8 +123,6 @@ public class ListingListFragment extends ListFragment {
 				refreshList(mListingList);
 			}
 		});
-		
-		mListAdapter = new ListingListArrayAdapater(mActivity);
 
 		// get Fragment Manager
 		fm = getFragmentManager();
@@ -135,6 +136,7 @@ public class ListingListFragment extends ListFragment {
 		mEndlessListener = new EndlessScrollListener();
 		mListView = getListView();
 		mListView.setOnScrollListener(mEndlessListener);
+		mListView.setAdapter(mListAdapter);
 		extras = getArguments();
 		String queryString = extras.getString("query");
 		search(queryString);
@@ -209,10 +211,13 @@ public class ListingListFragment extends ListFragment {
 		};
 
 		Collections.sort(list, revewSort);
+		Collections.reverse(list);
 	}
 
 	private void refreshList(List<Business> list) {
-		mListAdapter = new ListingListArrayAdapater(getActivity(), list);
+		mListAdapter.clear();
+		mListAdapter.addAll(list);
+//		mListAdapter = new ListingListArrayAdapaterNoHolder(getActivity(), list);
 		mListAdapter.notifyDataSetChanged();
 		getListView().invalidateViews();
 	}
@@ -265,11 +270,13 @@ public class ListingListFragment extends ListFragment {
 		return new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
-				List<Business> businessList = BusinessFactory
+				mListingList = BusinessFactory
 						.getBusinessList(response);
-				Business.storeAll(businessList);
-				mListAdapter.addAll(businessList);
+				Business.storeAll(mListingList);
+				mListAdapter.addAll(mListingList);
 				mListAdapter.notifyDataSetChanged();
+				getListView().invalidateViews();
+
 			}
 		};
 	}
