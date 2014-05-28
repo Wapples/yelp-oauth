@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 
@@ -34,6 +35,7 @@ import com.yelpoauth.app.android.helpers.U;
 import com.yelpoauth.app.android.models.Business;
 import com.yelpoauth.app.android.models.BusinessFactory;
 import com.yelpoauth.app.android.oauth.VolleyYelpClient;
+import com.yelpoauth.app.android.views.activities.GoogleImageSearchVolleyActivity.EndlessScrollListener;
 
 /**
  * @author wapples
@@ -59,6 +61,10 @@ public class ListingListFragment extends ListFragment {
 
 	private String mQuery;
 
+	private EndlessScrollListener mEndlessListener;
+
+	private ListView mListView;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -68,16 +74,10 @@ public class ListingListFragment extends ListFragment {
 				.inflate(R.layout.fragment_list_view, container, false);
 
 		mActivity = getActivity();
+		mUserLocation = U.getCurrentLocation(mActivity);
 
-		progressDialog = new ProgressDialog(mActivity);
-		progressDialog.setMessage("Loading Markers, Please Wait...");
-		progressDialog.setCancelable(true);
-
-		extras = getArguments();
-		String queryString = extras.getString("query");
-		
-		List<Business> mData = (List<Business>) extras
-				.getSerializable("business-list");
+		// List<Business> mData = (List<Business>) extras
+		// .getSerializable("business-list");
 
 		mSearchResultView = (TextView) v.findViewById(R.id.search_results);
 
@@ -87,42 +87,6 @@ public class ListingListFragment extends ListFragment {
 				.findViewById(R.id.tv_list_filters_rating);
 		mListfilterReviews = (TextView) v
 				.findViewById(R.id.tv_list_filters_reviews);
-
-		// get Fragment Manager
-		fm = getFragmentManager();
-
-		setList(mData);
-
-		return v;
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-	}
-
-	public void sortListDistance() {
-		sortByDistance(mListingList);
-
-	}
-
-	public void setList(List<Business> list) {
-
-		mListingList = list;
-		// Sort By Featured Status and Distance descending
-		sortByDistance(mListingList);
-
-		mSearchResultView.setText(mListingList.size() + "");
-
-		// Create row list adapter
-		mListAdapter = new ListingListArrayAdapater(getActivity(), mListingList);
 
 		// Handler for distance filter
 		mListfilterDistance.setOnClickListener(new OnClickListener() {
@@ -156,9 +120,61 @@ public class ListingListFragment extends ListFragment {
 				refreshList(mListingList);
 			}
 		});
+		
+		mListAdapter = new ListingListArrayAdapater(mActivity);
 
-		setListAdapter(mListAdapter);
+		// get Fragment Manager
+		fm = getFragmentManager();
+
+		return v;
 	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		mEndlessListener = new EndlessScrollListener();
+		mListView = getListView();
+		mListView.setOnScrollListener(mEndlessListener);
+		extras = getArguments();
+		String queryString = extras.getString("query");
+		search(queryString);
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+	}
+
+	public void sortListDistance() {
+		sortByDistance(mListingList);
+
+	}
+
+	public void search(String query) {
+		mEndlessListener.resetListener();
+
+		mQuery = query;
+
+		// set title
+		mActivity.setTitle("Searching - " + mQuery);
+		
+		loadMore();
+	}
+
+	public void loadMore() {
+		int count = 0;
+		if (mListAdapter != null){
+			count = mListAdapter.getCount();
+		}
+		
+		VolleyYelpClient.search(mQuery, count,
+				mUserLocation.getLatitude() + "", mUserLocation.getLongitude()
+						+ "", yelpResponseSuccessListener(),
+				yelpErrorListener());
+	}
+
 
 	public void sortByDistance(List<Business> listingList) {
 		// Comparator by distance
@@ -200,7 +216,7 @@ public class ListingListFragment extends ListFragment {
 		mListAdapter.notifyDataSetChanged();
 		getListView().invalidateViews();
 	}
-	
+
 	public class EndlessScrollListener implements OnScrollListener {
 		private int visibleThreshold = 10;
 		private int currentPage = 0;
@@ -208,17 +224,17 @@ public class ListingListFragment extends ListFragment {
 		private boolean loading = true;
 
 		public EndlessScrollListener() {
-			
+
 		}
-		
-		public void resetListener(){
+
+		public void resetListener() {
 			previousTotal = 0;
 			loading = true;
 		}
-		
+
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			
+
 		}
 
 		@Override
@@ -231,8 +247,10 @@ public class ListingListFragment extends ListFragment {
 					currentPage++;
 				}
 			}
-			//if we are not loading and the (total - visible in view) <=  (current top item position + the threshold value)
-			if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+			// if we are not loading and the (total - visible in view) <=
+			// (current top item position + the threshold value)
+			if (!loading
+					&& (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 				loadMore();
 				loading = true;
 			}
@@ -243,57 +261,29 @@ public class ListingListFragment extends ListFragment {
 		}
 	}
 
-	public void loadMore() {
-		Location userLocation = U.getCurrentLocation(mActivity);
-		VolleyYelpClient.search(mQuery,
-								mListAdapter.getCount(),
-								userLocation.getLatitude() +"", 
-								userLocation.getLongitude() + "", 
-								yelpResponseSuccessListener(), 
-								yelpErrorListener());
-	}
-	
-	public void search(String query) {
-		mQuery = query;
-		Location userLocation = U.getCurrentLocation(mActivity);
-		VolleyYelpClient.search(mQuery, 
-								mListAdapter.getCount(),
-								userLocation.getLatitude() +"", 
-								userLocation.getLongitude() + "", 
-								yelpResponseSuccessListener(), 
-								yelpErrorListener());
-	}
-	
-	private Response.Listener<JSONObject> yelpResponseSuccessListener() {	
+	private Response.Listener<JSONObject> yelpResponseSuccessListener() {
 		return new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
-				
-				List<Business> businessList = BusinessFactory.getBusinessList(response);
+				List<Business> businessList = BusinessFactory
+						.getBusinessList(response);
 				Business.storeAll(businessList);
-//				List<Business> storedBusinessList = Business.getAll();
-				
-				setList(businessList);
-				
-//				Bundle extras = new Bundle();
-//				extras.putSerializable("business-list", (Serializable) businessList);
-//				
-//				ListingListFragment businessListFrag = new ListingListFragment();
-//				businessListFrag.setArguments(extras);
-//				
-//				FragmentTransaction ft = fm.beginTransaction();
-//				ft.replace(R.id.content_frame, businessListFrag);
-//				ft.commit();
+				mListAdapter.addAll(businessList);
+				mListAdapter.notifyDataSetChanged();
 			}
 		};
 	}
-	
 
 	private Response.ErrorListener yelpErrorListener() {
 		return new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				showErrorDialog(error);
 			}
 		};
+	}
+	
+	private void showErrorDialog(Exception e) {
+		e.printStackTrace();
 	}
 }
