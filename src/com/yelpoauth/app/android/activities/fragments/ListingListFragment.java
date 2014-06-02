@@ -34,8 +34,11 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.maps.model.LatLng;
 import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.adapters.ListingListArrayAdapater;
+import com.yelpoauth.app.android.helpers.ConnectivityMonitor;
+import com.yelpoauth.app.android.helpers.LocationHelper;
 import com.yelpoauth.app.android.helpers.U;
 import com.yelpoauth.app.android.models.Business;
 import com.yelpoauth.app.android.models.BusinessFactory;
@@ -70,6 +73,10 @@ public class ListingListFragment extends ListFragment {
 
 	private ListView mListView;
 
+	private ConnectivityMonitor mConnectivityManager;
+
+	private LocationHelper mLocationHelper;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -79,7 +86,9 @@ public class ListingListFragment extends ListFragment {
 				.inflate(R.layout.fragment_list_view, container, false);
 
 		mActivity = getActivity();
+		mLocationHelper = new LocationHelper(mActivity);
 		mUserLocation = U.getCurrentLocation(mActivity);
+		mConnectivityManager = new ConnectivityMonitor(mActivity);
 		setHasOptionsMenu(true);
 
 		mSearchResultView = (TextView) v.findViewById(R.id.search_results);
@@ -149,10 +158,22 @@ public class ListingListFragment extends ListFragment {
 		mListView.setOnScrollListener(mEndlessListener);
 		mListView.setAdapter(mListAdapter);
 		
+		if (!mConnectivityManager.isNetworkAvailable()){
+			loadDataFromStorage();
+		}
+		
 //		extras = getArguments();
 //		String queryString = extras.getString("query");
 //		search(queryString);
 
+	}
+
+	private void loadDataFromStorage() {
+		mListingList = Business.getAllLastQuery();
+		mListAdapter.addAll(mListingList);
+		mListAdapter.notifyDataSetChanged();
+		getListView().invalidateViews();
+		mSearchResultView.setText(mListAdapter.getCount() + "");
 	}
 
 	@Override
@@ -186,9 +207,11 @@ public class ListingListFragment extends ListFragment {
 		if (mListAdapter != null){
 			count = mListAdapter.getCount();
 		}
-		
+//		LatLng userLocation = mLocationHelper.getLatLng();
+		Location userLocation = mLocationHelper.getLocation();
+
 		VolleyYelpClient.search(mQuery, count,
-				mUserLocation.getLatitude() + "", mUserLocation.getLongitude()
+				userLocation.getLatitude() + "", userLocation.getLongitude()
 						+ "", yelpResponseSuccessListener(),
 				yelpErrorListener());
 	}

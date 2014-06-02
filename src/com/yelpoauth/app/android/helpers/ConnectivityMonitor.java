@@ -13,13 +13,9 @@ public class ConnectivityMonitor {
 		mContext = c;
 	}
 
-	public Boolean hasInternet(){
-        boolean wifiEnabled = wifiManager.isWifiEnabled();
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (!wifiEnabled && !activeNetwork.isConnected()){
-        	return false;
-        }
-        return true;
+	public boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 }

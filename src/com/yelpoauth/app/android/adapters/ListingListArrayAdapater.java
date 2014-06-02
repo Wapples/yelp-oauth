@@ -26,13 +26,11 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 	private static class ViewHolder {
 		TextView addressView;
 		TextView titleView;
-		TextView hoursView;
 		TextView reviewCountView;
 		TextView distanceView;
 		ImageView avatarView;
 		ImageView ratingImageView;
 		Button callView;
-		Button directionsView;
 	}
 
 	public Location mUserLocation;
@@ -61,8 +59,6 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 					.findViewById(R.id.tv_dispensary_address_list);
 			viewHolder.distanceView = (TextView) convertView
 					.findViewById(R.id.dispensary_distance_list);
-			viewHolder.hoursView = (TextView) convertView
-					.findViewById(R.id.dispensary_hours_list);
 			viewHolder.reviewCountView = (TextView) convertView
 					.findViewById(R.id.dispensary_reviews_list);
 			viewHolder.titleView = (TextView) convertView
@@ -73,8 +69,6 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 					.findViewById(R.id.iv_rating_list);
 			viewHolder.callView = (Button) convertView
 					.findViewById(R.id.dispensary_phone_list);
-			viewHolder.directionsView = (Button) convertView
-					.findViewById(R.id.dispensary_directions_list);
 
 			convertView.setTag(viewHolder);
 		} else {
@@ -85,15 +79,12 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 
 		viewHolder.addressView.setText(business.streetAddress);
 		viewHolder.distanceView.setText(distance + " mi");
-		// viewHolder.hoursView.setText(listing.hoursOpen + " - "
-		// + listing.hoursClose);
 		viewHolder.reviewCountView.setText(business.reviewCount + "");
 		viewHolder.titleView.setText(business.name);
-		viewHolder.callView.setOnClickListener(new CallClickListener(business,
-				context));
-		convertView.setOnClickListener(new ListItemClickListener(business,
-				context));
-
+		viewHolder.callView.setText(business.displayPhone);
+		viewHolder.callView.setTextSize(12);
+		viewHolder.callView.setOnClickListener(new CallClickListener(business, context));
+		convertView.setOnClickListener(new ListItemClickListener(business, context));
 		
 		ImageLoader.getInstance().displayImage(business.imageUrl, viewHolder.avatarView);
 		ImageLoader.getInstance().displayImage(business.ratingImageUrl, viewHolder.ratingImageView);
@@ -112,7 +103,7 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 
 		@Override
 		public void onClick(View v) {
-			String dispPhone = mBusiness.phone;
+			String dispPhone = mBusiness.displayPhone;
 			String number = "tel:" + dispPhone;
 			Intent phoneCallIntent = new Intent(Intent.ACTION_CALL,
 					Uri.parse(number));
@@ -120,28 +111,6 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 		}
 	}
 
-	private class DirectionsClickListener implements OnClickListener {
-		private Business mBusiness;
-		private Context mContext;
-		private Location mListingLocation;
-
-		public DirectionsClickListener(Business l, Context c, Location location) {
-			mBusiness = l;
-			mContext = c;
-			mListingLocation = location;
-		}
-
-		@Override
-		public void onClick(View v) {
-			Uri uri = Uri.parse("http://maps.google.com/maps?" + "saddr="
-					+ mUserLocation.getLatitude() + ","
-					+ mUserLocation.getLongitude() + "&" + "daddr="
-					+ mListingLocation.getLatitude() + ","
-					+ mListingLocation.getLongitude());
-			Intent directionsIntent = new Intent(Intent.ACTION_VIEW, uri);
-			mContext.startActivity(directionsIntent);
-		}
-	}
 
 	private class ListItemClickListener implements OnClickListener {
 		private Business mBusiness;

@@ -32,6 +32,7 @@ import org.scribe.oauth.OAuthService;
 
 import android.net.Uri;
 import android.text.format.Time;
+import android.util.Log;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response.ErrorListener;
@@ -92,6 +93,7 @@ public class VolleyYelpClient {
 		String signedQuery = "";
 		try {
 			signedQuery = consumer.sign(requestUrl);
+			Log.i("REQUEST", "request: " + signedQuery);
 		} catch (OAuthMessageSignerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
