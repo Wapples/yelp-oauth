@@ -14,8 +14,8 @@
             android:background="#FFFFFF"
             android:orientation="vertical"
             android:layout_marginLeft="5sp"
-            android:layout_marginTop="2sp"
-            >
+            android:layout_marginTop="2sp" >
+            
             <LinearLayout
                 android:id="@+id/avatar_title_hits"
                 android:layout_width="wrap_content"
@@ -127,16 +127,16 @@
                 		android:layout_marginTop="2sp">
                 		<Button
                     		android:id="@+id/dispensary_phone_list"
-                    		android:layout_width="50sp"
-                    		android:layout_height="20sp"
-                    		android:layout_marginRight="15sp"
-                    		android:background="@drawable/kk_call" />
+                    		android:layout_width="wrap_content"
+                    		android:layout_height="wrap_content"
+                    		android:text="Call"
+                    		android:layout_marginRight="15sp"/>
                 		<Button
                     		android:id="@+id/dispensary_directions_list"
-                    		android:layout_width="50sp"
-                    		android:layout_height="20sp"
-                    		android:layout_marginRight="20sp"
-                    		android:background="@drawable/kk_directions_white" />
+                    		android:layout_width="wrap_content"
+                    		android:layout_height="wrap_content"
+                    		android:text="Directions"
+                    		android:layout_marginRight="20sp" />
             		</LinearLayout>
 
                 </LinearLayout>

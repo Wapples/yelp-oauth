@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -97,9 +98,12 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				sortByDistance(mListingList);
-
-				refreshList(mListingList);
+				if (mListingList.isEmpty()){
+					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
+				} else {
+					sortByDistance(mListingList);
+					refreshList(mListingList);
+				}
 			}
 		});
 
@@ -108,9 +112,12 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				sortByRating(mListingList);
-
-				refreshList(mListingList);
+				if (mListingList.isEmpty()){
+					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
+				} else {
+					sortByRating(mListingList);
+					refreshList(mListingList);
+				}
 			}
 		});
 
@@ -119,9 +126,12 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				sortByReviews(mListingList);
-
-				refreshList(mListingList);
+				if (mListingList.isEmpty()){
+					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
+				} else {
+					sortByReviews(mListingList);
+					refreshList(mListingList);
+				}
 			}
 		});
 
@@ -282,6 +292,7 @@ public class ListingListFragment extends ListFragment {
 				mListAdapter.addAll(mListingList);
 				mListAdapter.notifyDataSetChanged();
 				getListView().invalidateViews();
+				mSearchResultView.setText(mListAdapter.getCount() + "");
 
 			}
 		};
