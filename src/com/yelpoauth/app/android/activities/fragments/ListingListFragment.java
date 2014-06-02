@@ -3,7 +3,6 @@
  */
 package com.yelpoauth.app.android.activities.fragments;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,16 +14,16 @@ import android.app.ProgressDialog;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -48,6 +47,7 @@ public class ListingListFragment extends ListFragment {
 	private FragmentManager fm;
 	private List<Business> mListingList;
 	private ListingListArrayAdapater mListAdapter;
+//	private ListingListArrayAdapaterNoHolder mListAdapter;
 	private Location mUserLocation;
 	private ProgressDialog progressDialog;
 
@@ -59,6 +59,10 @@ public class ListingListFragment extends ListFragment {
 
 	private String mQuery;
 
+	private EndlessScrollListener mEndlessListener;
+
+	private ListView mListView;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -68,16 +72,7 @@ public class ListingListFragment extends ListFragment {
 				.inflate(R.layout.fragment_list_view, container, false);
 
 		mActivity = getActivity();
-
-		progressDialog = new ProgressDialog(mActivity);
-		progressDialog.setMessage("Loading Markers, Please Wait...");
-		progressDialog.setCancelable(true);
-
-		extras = getArguments();
-		String queryString = extras.getString("query");
-		
-		List<Business> mData = (List<Business>) extras
-				.getSerializable("business-list");
+		mUserLocation = U.getCurrentLocation(mActivity);
 
 		mSearchResultView = (TextView) v.findViewById(R.id.search_results);
 
@@ -88,42 +83,8 @@ public class ListingListFragment extends ListFragment {
 		mListfilterReviews = (TextView) v
 				.findViewById(R.id.tv_list_filters_reviews);
 
-		// get Fragment Manager
-		fm = getFragmentManager();
-
-		setList(mData);
-
-		return v;
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-	}
-
-	public void sortListDistance() {
-		sortByDistance(mListingList);
-
-	}
-
-	public void setList(List<Business> list) {
-
-		mListingList = list;
-		// Sort By Featured Status and Distance descending
-		sortByDistance(mListingList);
-
-		mSearchResultView.setText(mListingList.size() + "");
-
-		// Create row list adapter
-		mListAdapter = new ListingListArrayAdapater(getActivity(), mListingList);
-
+		mListAdapter = new ListingListArrayAdapater(mActivity);
+		
 		// Handler for distance filter
 		mListfilterDistance.setOnClickListener(new OnClickListener() {
 
@@ -157,8 +118,59 @@ public class ListingListFragment extends ListFragment {
 			}
 		});
 
-		setListAdapter(mListAdapter);
+		// get Fragment Manager
+		fm = getFragmentManager();
+
+		return v;
 	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		mEndlessListener = new EndlessScrollListener();
+		mListView = getListView();
+		mListView.setOnScrollListener(mEndlessListener);
+		mListView.setAdapter(mListAdapter);
+		extras = getArguments();
+		String queryString = extras.getString("query");
+		search(queryString);
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+	}
+
+	public void sortListDistance() {
+		sortByDistance(mListingList);
+
+	}
+
+	public void search(String query) {
+		mEndlessListener.resetListener();
+
+		mQuery = query;
+
+		// set title
+		mActivity.setTitle("Searching - " + mQuery);
+		
+		loadMore();
+	}
+
+	public void loadMore() {
+		int count = 0;
+		if (mListAdapter != null){
+			count = mListAdapter.getCount();
+		}
+		
+		VolleyYelpClient.search(mQuery, count,
+				mUserLocation.getLatitude() + "", mUserLocation.getLongitude()
+						+ "", yelpResponseSuccessListener(),
+				yelpErrorListener());
+	}
+
 
 	public void sortByDistance(List<Business> listingList) {
 		// Comparator by distance
@@ -193,14 +205,17 @@ public class ListingListFragment extends ListFragment {
 		};
 
 		Collections.sort(list, revewSort);
+		Collections.reverse(list);
 	}
 
 	private void refreshList(List<Business> list) {
-		mListAdapter = new ListingListArrayAdapater(getActivity(), list);
+		mListAdapter.clear();
+		mListAdapter.addAll(list);
+//		mListAdapter = new ListingListArrayAdapaterNoHolder(getActivity(), list);
 		mListAdapter.notifyDataSetChanged();
 		getListView().invalidateViews();
 	}
-	
+
 	public class EndlessScrollListener implements OnScrollListener {
 		private int visibleThreshold = 10;
 		private int currentPage = 0;
@@ -208,17 +223,17 @@ public class ListingListFragment extends ListFragment {
 		private boolean loading = true;
 
 		public EndlessScrollListener() {
-			
+
 		}
-		
-		public void resetListener(){
+
+		public void resetListener() {
 			previousTotal = 0;
 			loading = true;
 		}
-		
+
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			
+
 		}
 
 		@Override
@@ -231,8 +246,10 @@ public class ListingListFragment extends ListFragment {
 					currentPage++;
 				}
 			}
-			//if we are not loading and the (total - visible in view) <=  (current top item position + the threshold value)
-			if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+			// if we are not loading and the (total - visible in view) <=
+			// (current top item position + the threshold value)
+			if (!loading
+					&& (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 				loadMore();
 				loading = true;
 			}
@@ -243,57 +260,31 @@ public class ListingListFragment extends ListFragment {
 		}
 	}
 
-	public void loadMore() {
-		Location userLocation = U.getCurrentLocation(mActivity);
-		VolleyYelpClient.search(mQuery,
-								mListAdapter.getCount(),
-								userLocation.getLatitude() +"", 
-								userLocation.getLongitude() + "", 
-								yelpResponseSuccessListener(), 
-								yelpErrorListener());
-	}
-	
-	public void search(String query) {
-		mQuery = query;
-		Location userLocation = U.getCurrentLocation(mActivity);
-		VolleyYelpClient.search(mQuery, 
-								mListAdapter.getCount(),
-								userLocation.getLatitude() +"", 
-								userLocation.getLongitude() + "", 
-								yelpResponseSuccessListener(), 
-								yelpErrorListener());
-	}
-	
-	private Response.Listener<JSONObject> yelpResponseSuccessListener() {	
+	private Response.Listener<JSONObject> yelpResponseSuccessListener() {
 		return new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
-				
-				List<Business> businessList = BusinessFactory.getBusinessList(response);
-				Business.storeAll(businessList);
-//				List<Business> storedBusinessList = Business.getAll();
-				
-				setList(businessList);
-				
-//				Bundle extras = new Bundle();
-//				extras.putSerializable("business-list", (Serializable) businessList);
-//				
-//				ListingListFragment businessListFrag = new ListingListFragment();
-//				businessListFrag.setArguments(extras);
-//				
-//				FragmentTransaction ft = fm.beginTransaction();
-//				ft.replace(R.id.content_frame, businessListFrag);
-//				ft.commit();
+				mListingList = BusinessFactory
+						.getBusinessList(response);
+				Business.storeAll(mListingList);
+				mListAdapter.addAll(mListingList);
+				mListAdapter.notifyDataSetChanged();
+				getListView().invalidateViews();
+
 			}
 		};
 	}
-	
 
 	private Response.ErrorListener yelpErrorListener() {
 		return new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				showErrorDialog(error);
 			}
 		};
+	}
+	
+	private void showErrorDialog(Exception e) {
+		e.printStackTrace();
 	}
 }

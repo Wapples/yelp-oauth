@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
+import com.yelpoauth.app.android.helpers.InitImageLoader;
 
 public class VolleyController extends com.activeandroid.app.Application {
 
@@ -27,6 +28,8 @@ public class VolleyController extends com.activeandroid.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        InitImageLoader.init(this);
 
         // initialize the singleton
         sInstance = this;
