@@ -24,10 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.yelpoauth.app.android.views.activities.QueryHistoryActivity"
-            android:parentActivityName="com.yelpoauth.app.android.views.activities.GoogleImageSearchVolleyActivity" >
-        </activity>
-        <activity android:name="com.yelpoauth.app.android.views.activities.GoogleImageSearchVolleyActivity" >
+            android:name="com.yelpoauth.app.android.views.activities.QueryHistoryActivity" >
         </activity>
         <activity android:name="com.yelpoauth.app.android.views.activities.ListingDetailActivity" >
         </activity>

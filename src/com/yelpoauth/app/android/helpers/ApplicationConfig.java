@@ -12,7 +12,7 @@ public class ApplicationConfig {
     public static void setupActionBar(Activity activity) {
 
 	View actionBarTheme = activity.getLayoutInflater().inflate(
-		R.layout.kk_green_action_bar, null);
+		R.layout.custom_action_bar, null);
 
 	// enable ActionBar app icon to behave as action to toggle nav drawer
 	ActionBar actionBar = activity.getActionBar();

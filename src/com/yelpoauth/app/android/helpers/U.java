@@ -26,7 +26,6 @@ public class U {
 	// hard-coded location for when no other location can be found.
 	public final static double LATITUDE  =   33.681278;
 	public final static double LONGITUDE = -117.891411;
-	public final static String BASE_URL = "https://staging.weedmaps.com/api/v4/";
 	
 	// name of SharedPreferences object    
     FragmentManager fm;
