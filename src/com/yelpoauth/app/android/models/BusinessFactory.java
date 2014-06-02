@@ -32,6 +32,10 @@ public class BusinessFactory {
 	public static String MOBILE_URL = "mobile_url";
 	public static String URL = "url";
 	public static String STREET_ADDRESS = "address";
+	public static String DISPLAY_ADDRESS = "display_address";
+	public static String LOCATION = "location";
+	
+
 	
 	public static List<Business> getBusinessList(JSONObject input){
 		List<Business> businessList = new ArrayList<Business>();
@@ -41,6 +45,7 @@ public class BusinessFactory {
 			Business business = new Business();
 			try {
 				JSONObject businessObject = businessArray.getJSONObject(i);
+				JSONObject locationObject = U.go(businessObject, LOCATION);
 				if (!U.gs(businessObject, RATING_IMG_URL_LARGE).equals(null)){
 					business.ratingImageUrl = U.gs(businessObject, RATING_IMG_URL_LARGE);
 				}
@@ -95,8 +100,8 @@ public class BusinessFactory {
 				if (U.ga(businessObject, CATEGORIES).length() > 0){
 					business.categories = U.getStringArrayList(U.ga(businessObject, CATEGORIES));
 				}
-				if (U.ga(businessObject, STREET_ADDRESS).length() > 0){
-					business.streetAddress = U.getStringFromArray(U.ga(businessObject, STREET_ADDRESS));
+				if (U.ga(locationObject, DISPLAY_ADDRESS).length() > 0){
+					business.streetAddress = U.getStringFromArray(U.ga(locationObject, DISPLAY_ADDRESS));
 				} else {
 					business.streetAddress = "no street address";
 				}

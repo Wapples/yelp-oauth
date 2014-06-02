@@ -115,7 +115,7 @@
                 	        android:id="@+id/dispensary_hours_list"
                 	        android:layout_width="wrap_content"
                 	        android:layout_height="wrap_content"
-                	        android:text="hours"
+                	        android:text="Open/Closed"
                 	        android:textColor="#b4b4b4" />
                 	</LinearLayout>
 

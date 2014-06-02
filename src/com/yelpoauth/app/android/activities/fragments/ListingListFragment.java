@@ -98,7 +98,7 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				if (mListingList.isEmpty()){
+				if (mListingList == null){
 					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
 				} else {
 					sortByDistance(mListingList);
@@ -112,7 +112,7 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				if (mListingList.isEmpty()){
+				if (mListingList  == null){
 					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
 				} else {
 					sortByRating(mListingList);
@@ -126,7 +126,7 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				if (mListingList.isEmpty()){
+				if (mListingList  == null){
 					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
 				} else {
 					sortByReviews(mListingList);
