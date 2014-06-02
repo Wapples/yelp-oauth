@@ -119,119 +119,30 @@
 
             </LinearLayout>
         </LinearLayout>
-        
-      
-        
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-		
-            <LinearLayout
-                 android:layout_width="wrap_content"
-            	 android:layout_height="wrap_content"
-            	 android:layout_gravity="center_horizontal" >
-                
-            <TableLayout
-                android:id="@+id/tl_dispensary_options"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/myRectangleView"
-                android:layout_alignRight="@+id/myRectangleView"
-                android:layout_below="@+id/tv_login_signup"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/roundedcorner" >
+                android:orientation="vertical" >
 
-        <TableRow
-            android:id="@+id/tr_directions"
-            style="@drawable/cross"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_weight="1"
-            android:background="@drawable/toprow"
-            android:padding="4dp" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp" >
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/circle" />
-
-                <TextView
-                    android:id="@+id/textView8"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Directions" />
+                    android:layout_gravity="center_horizontal" >
 
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/b_dispensary_phone_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15sp"
+                        android:text="Call" />
 
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layout_marginLeft="90dp"
-                android:src="@drawable/arrow" />
+                    <Button
+                        android:id="@+id/b_dispensary_directions_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20sp"
+                        android:text="Directions" />
 
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tr_listing_call"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:background="#fff"
-            android:padding="3dp" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp" >
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="18dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/circle" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Call" />
-
-            </LinearLayout>
-            
-			 <TextView
-                    android:id="@+id/tv_dispensary_details_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="right"
-                    android:text="" />
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layout_marginLeft="35dp"
-                android:src="@drawable/arrow"/>
-
-        </TableRow>
-  		  </TableLayout>
        </LinearLayout>
     </LinearLayout>
        

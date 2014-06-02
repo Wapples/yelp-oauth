@@ -11,11 +11,16 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -23,7 +28,9 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -73,6 +80,7 @@ public class ListingListFragment extends ListFragment {
 
 		mActivity = getActivity();
 		mUserLocation = U.getCurrentLocation(mActivity);
+		setHasOptionsMenu(true);
 
 		mSearchResultView = (TextView) v.findViewById(R.id.search_results);
 
@@ -90,9 +98,12 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				sortByDistance(mListingList);
-
-				refreshList(mListingList);
+				if (mListingList == null){
+					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
+				} else {
+					sortByDistance(mListingList);
+					refreshList(mListingList);
+				}
 			}
 		});
 
@@ -101,9 +112,12 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				sortByRating(mListingList);
-
-				refreshList(mListingList);
+				if (mListingList  == null){
+					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
+				} else {
+					sortByRating(mListingList);
+					refreshList(mListingList);
+				}
 			}
 		});
 
@@ -112,9 +126,12 @@ public class ListingListFragment extends ListFragment {
 
 			@Override
 			public void onClick(View v) {
-				sortByReviews(mListingList);
-
-				refreshList(mListingList);
+				if (mListingList  == null){
+					Toast.makeText(mActivity, "No Results to Filter", Toast.LENGTH_SHORT).show();
+				} else {
+					sortByReviews(mListingList);
+					refreshList(mListingList);
+				}
 			}
 		});
 
@@ -131,9 +148,10 @@ public class ListingListFragment extends ListFragment {
 		mListView = getListView();
 		mListView.setOnScrollListener(mEndlessListener);
 		mListView.setAdapter(mListAdapter);
-		extras = getArguments();
-		String queryString = extras.getString("query");
-		search(queryString);
+		
+//		extras = getArguments();
+//		String queryString = extras.getString("query");
+//		search(queryString);
 
 	}
 
@@ -149,6 +167,10 @@ public class ListingListFragment extends ListFragment {
 	}
 
 	public void search(String query) {
+		if (mListAdapter != null){
+			mListAdapter.clear();
+			mListView.invalidate();
+		}
 		mEndlessListener.resetListener();
 
 		mQuery = query;
@@ -270,6 +292,7 @@ public class ListingListFragment extends ListFragment {
 				mListAdapter.addAll(mListingList);
 				mListAdapter.notifyDataSetChanged();
 				getListView().invalidateViews();
+				mSearchResultView.setText(mListAdapter.getCount() + "");
 
 			}
 		};
@@ -287,4 +310,33 @@ public class ListingListFragment extends ListFragment {
 	private void showErrorDialog(Exception e) {
 		e.printStackTrace();
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		final MenuItem searchItem = menu.findItem(R.id.action_search);
+		searchItem.setVisible(true);
+	    SearchManager searchManager = (SearchManager) mActivity.getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+	    searchView.setSearchableInfo(searchManager.getSearchableInfo(mActivity.getComponentName()));
+		searchView.setSubmitButtonEnabled(true);
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String queryString) {
+				//search(queryString);
+				search(queryString);
+				//collapse  search 
+				searchItem.collapseActionView();
+
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String currentText) {
+				return false;
+			}
+		});
+		
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
 }

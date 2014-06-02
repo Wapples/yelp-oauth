@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -43,8 +44,8 @@ public class ListingDetailActivity extends FragmentActivity {
 	private FragmentManager fragmentManager;
 	private TextView tvAddress;
 	private GoogleMap mGoogleMap;
-	private TableRow trDirections;
-	private TableRow trCall;
+	private Button bDirections;
+	private Button bCall;
 	private TextView tvPhone;
 	protected SharedPreferences mSettings;
 	private boolean mDetailsInflated = false;
@@ -65,14 +66,13 @@ public class ListingDetailActivity extends FragmentActivity {
 		tvDistance = (TextView) findViewById(R.id.dispensary_distance_map);
 		tvHours = (TextView) findViewById(R.id.dispensary_hours_map);
 		tvAddress = (TextView) findViewById(R.id.dispensary_countdown_map);
-		tvPhone = (TextView) findViewById(R.id.tv_dispensary_details_phone);
 		
 		//Image Views
 		ivRating = (ImageView) findViewById(R.id.iv_listing_rating);
 
 		// Details Controls
-		trDirections = (TableRow) findViewById(R.id.tr_directions);
-		trCall = (TableRow) findViewById(R.id.tr_listing_call);
+		bDirections = (Button) findViewById(R.id.b_dispensary_directions_detail);
+		bCall = (Button) findViewById(R.id.b_dispensary_phone_detail);
 
 		if (getIntent().getExtras() != null) {
 			inflateDetails(getIntent().getExtras());
@@ -105,11 +105,10 @@ public class ListingDetailActivity extends FragmentActivity {
 		// tvHours.setText("Hours: " + mListing.hoursOpen);
 		tvAddress.setText(streetAddress);
 		tvAddress.setSelected(true);
-		tvPhone.setText("");
         
 		ImageLoader.getInstance().displayImage(b.ratingImageUrl, ivRating);
 
-		trCall.setOnClickListener(new OnClickListener() {
+		bCall.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String number = "tel:" + mListing.phone.trim();
 				Intent phoneCallIntent = new Intent(Intent.ACTION_CALL, Uri
@@ -118,7 +117,7 @@ public class ListingDetailActivity extends FragmentActivity {
 			}
 		});
 
-		trDirections.setOnClickListener(new OnClickListener() {
+		bDirections.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
 				Uri uri = Uri.parse("http://maps.google.com/maps?" + "saddr="
