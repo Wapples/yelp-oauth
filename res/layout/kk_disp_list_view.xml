@@ -111,12 +111,6 @@
                     		android:marqueeRepeatLimit="marquee_forever"
                     		android:textColor="#b4b4b4" />
 
-                	    <TextView
-                	        android:id="@+id/dispensary_hours_list"
-                	        android:layout_width="wrap_content"
-                	        android:layout_height="wrap_content"
-                	        android:text="Open/Closed"
-                	        android:textColor="#b4b4b4" />
                 	</LinearLayout>
 
             		<LinearLayout 
@@ -125,18 +119,13 @@
                 		android:layout_height="wrap_content"
                 		android:orientation="horizontal"
                 		android:layout_marginTop="2sp">
+                	    
                 		<Button
                     		android:id="@+id/dispensary_phone_list"
                     		android:layout_width="wrap_content"
                     		android:layout_height="wrap_content"
                     		android:text="Call"
                     		android:layout_marginRight="15sp"/>
-                		<Button
-                    		android:id="@+id/dispensary_directions_list"
-                    		android:layout_width="wrap_content"
-                    		android:layout_height="wrap_content"
-                    		android:text="Directions"
-                    		android:layout_marginRight="20sp" />
             		</LinearLayout>
 
                 </LinearLayout>

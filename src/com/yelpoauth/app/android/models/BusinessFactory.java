@@ -1,5 +1,6 @@
 package com.yelpoauth.app.android.models;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,8 @@ public class BusinessFactory {
 					business.yelpId = U.gs(businessObject, YELP_ID);
 				}
 				if (!U.gs(businessObject, DISTANCE).equals(null)){
-					business.distance = U.gd(businessObject, DISTANCE);
+					Double distanceDouble= (U.gd(businessObject, DISTANCE) / 1609.344);
+					business.distance = distanceDouble;
 				}
 				if (!U.gs(businessObject, IMAGE_URL).equals(null)){
 					business.imageUrl = U.gs(businessObject, IMAGE_URL);

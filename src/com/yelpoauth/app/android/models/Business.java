@@ -10,9 +10,9 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
-@Table(name = "Businesses")
+@Table(name = "Business")
 public class Business  extends Model implements Serializable {
-	public static String QUERY = "query";
+	public static String QUERY = "Query";
 	
 	@Column(name = "Query")
 	public Query query;
@@ -68,13 +68,7 @@ public class Business  extends Model implements Serializable {
 	@Column(name = "isClosed")
 	public Boolean isClosed;
 	
-	@Column(name = "latitude")
-	public Boolean latitude;
-	
-	@Column(name = "longitude")
-	public Boolean longitude;
-	
-	@Column(name = "streetAddress")
+	@Column(name = "street_address")
 	public String streetAddress;
 	
 	@Column(name = "categories")
@@ -96,7 +90,7 @@ public class Business  extends Model implements Serializable {
 	    return new Select()
 	        .from(Business.class)
 	        .where(QUERY + "= ?", query.getId())
-	        .orderBy(BusinessFactory.NAME +" ASC")
+	        .orderBy(BusinessFactory.DISTANCE +" ASC")
 	        .execute();
 	}
 	
@@ -112,13 +106,23 @@ public class Business  extends Model implements Serializable {
 		List<Business> list = new Select()
 	        .from(Business.class)
 	        .where(BusinessFactory.NAME + "= ?", name)
-	        .orderBy(BusinessFactory.DISTANCE + " ASC")
 	        .execute();
 		if (list.size() > 0){
 			ret = true;
 		}
 		return ret;
 	}
+	
+	public static List<Business> getAllLastQuery() {
+		Query lastQuery = Query.getLastStoredItem();
+		
+		List<Business> ret = new Select().from(Business.class)
+        .orderBy(BusinessFactory.DISTANCE + " ASC")
+        .execute();
+		
+	    return ret;
+	}
+	
 	 
 
 }
