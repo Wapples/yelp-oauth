@@ -211,6 +211,7 @@ public class ListingListFragment extends ListFragment {
 	}
 
 	public void loadMore() {
+		mActivity.setProgressBarIndeterminateVisibility(true);
 		int count = 0;
 		if (mListAdapter != null){
 			count = mListAdapter.getCount();
@@ -324,7 +325,7 @@ public class ListingListFragment extends ListFragment {
 				mListAdapter.notifyDataSetChanged();
 				getListView().invalidateViews();
 				mSearchResultView.setText(mListAdapter.getCount() + "");
-
+				mActivity.setProgressBarIndeterminateVisibility(false);
 			}
 		};
 	}
