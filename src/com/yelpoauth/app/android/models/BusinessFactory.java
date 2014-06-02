@@ -97,6 +97,8 @@ public class BusinessFactory {
 				}
 				if (U.ga(businessObject, STREET_ADDRESS).length() > 0){
 					business.streetAddress = U.getStringFromArray(U.ga(businessObject, STREET_ADDRESS));
+				} else {
+					business.streetAddress = "no street address";
 				}
 				businessList.add(business);
 			} catch (JSONException e) {

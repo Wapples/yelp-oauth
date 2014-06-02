@@ -29,6 +29,7 @@ import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.activities.fragments.ListingListFragment;
 import com.yelpoauth.app.android.adapters.ImageAdapter;
 import com.yelpoauth.app.android.helpers.ApplicationConfig;
+import com.yelpoauth.app.android.helpers.ConnectivityMonitor;
 import com.yelpoauth.app.android.helpers.GoogleImageClient;
 import com.yelpoauth.app.android.helpers.U;
 import com.yelpoauth.app.android.models.Business;
@@ -58,9 +59,18 @@ public class YelpSearchActivity extends FragmentActivity {
 		mContext = this;
 
 		fm = getSupportFragmentManager();
+		inflateSearch();
 		searchFromHistoryActivity();
 	}	
 	
+	private void inflateSearch() {			
+			ListingListFragment businessListFrag = new ListingListFragment();
+			
+			FragmentTransaction ft = fm.beginTransaction();
+			ft.replace(R.id.content_frame, businessListFrag);
+			ft.commit();
+	}
+
 	private void searchYelp(String query){
 		Bundle extras = new Bundle();
 		extras.putString("query", query);
@@ -104,29 +114,6 @@ public class YelpSearchActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.image_search, menu);
-
-		final MenuItem searchItem = menu.findItem(R.id.action_search);
-		final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-		searchView.setSubmitButtonEnabled(true);
-		
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-			@Override
-			public boolean onQueryTextSubmit(String queryString) {
-				//perform search
-				//search(queryString);
-				searchYelp(queryString);
-				//collapse  search 
-				searchItem.collapseActionView();
-
-				return true;
-			}
-
-			@Override
-			public boolean onQueryTextChange(String currentText) {
-				return false;
-			}
-		});
 		return true;
 	}
 
