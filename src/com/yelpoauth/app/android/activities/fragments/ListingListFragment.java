@@ -36,7 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.maps.model.LatLng;
 import com.yelpoauth.app.android.R;
-import com.yelpoauth.app.android.adapters.ListingListArrayAdapater;
+import com.yelpoauth.app.android.adapters.BusinessListArrayAdapater;
 import com.yelpoauth.app.android.helpers.ConnectivityMonitor;
 import com.yelpoauth.app.android.helpers.LocationHelper;
 import com.yelpoauth.app.android.helpers.U;
@@ -57,7 +57,7 @@ public class ListingListFragment extends ListFragment {
 	private Bundle extras;
 	private FragmentManager fm;
 	private List<Business> mListingList;
-	private ListingListArrayAdapater mListAdapter;
+	private BusinessListArrayAdapater mListAdapter;
 //	private ListingListArrayAdapaterNoHolder mListAdapter;
 	private Location mUserLocation;
 	private ProgressDialog progressDialog;
@@ -101,7 +101,7 @@ public class ListingListFragment extends ListFragment {
 		mListfilterReviews = (TextView) v
 				.findViewById(R.id.tv_list_filters_reviews);
 
-		mListAdapter = new ListingListArrayAdapater(mActivity);
+		mListAdapter = new BusinessListArrayAdapater(mActivity);
 		
 		// Handler for distance filter
 		mListfilterDistance.setOnClickListener(new OnClickListener() {
@@ -248,6 +248,7 @@ public class ListingListFragment extends ListFragment {
 		};
 
 		Collections.sort(list, ratingSort);
+		Collections.reverse(list);
 	}
 
 	public void sortByReviews(List<Business> list) {

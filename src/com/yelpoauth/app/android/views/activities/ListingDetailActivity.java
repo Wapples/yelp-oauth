@@ -55,7 +55,7 @@ public class ListingDetailActivity extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.kk_listing_details_fragment);
+		setContentView(R.layout.business_details_layout);
 
 		mContext = this;
 

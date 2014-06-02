@@ -21,7 +21,7 @@ import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.models.Business;
 import com.yelpoauth.app.android.views.activities.ListingDetailActivity;
 
-public class ListingListArrayAdapater extends ArrayAdapter<Business> {
+public class BusinessListArrayAdapater extends ArrayAdapter<Business> {
 
 	private static class ViewHolder {
 		TextView addressView;
@@ -35,12 +35,12 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 
 	public Location mUserLocation;
 
-	public ListingListArrayAdapater(Context context, List<Business> listings) {
-		super(context, R.layout.kk_disp_list_view, listings);
+	public BusinessListArrayAdapater(Context context, List<Business> listings) {
+		super(context, R.layout.business_list_item, listings);
 
 	}
 	
-	public ListingListArrayAdapater(Context context) {
+	public BusinessListArrayAdapater(Context context) {
 		super(context, 0);
 
 	}
@@ -54,7 +54,7 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			LayoutInflater inflater = LayoutInflater.from(getContext());
-			convertView = inflater.inflate(R.layout.kk_disp_list_view, null);
+			convertView = inflater.inflate(R.layout.business_list_item, null);
 			viewHolder.addressView = (TextView) convertView
 					.findViewById(R.id.tv_dispensary_address_list);
 			viewHolder.distanceView = (TextView) convertView
