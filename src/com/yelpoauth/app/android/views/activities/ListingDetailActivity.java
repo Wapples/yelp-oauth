@@ -46,7 +46,6 @@ public class ListingDetailActivity extends FragmentActivity {
 	private GoogleMap mGoogleMap;
 	private Button bDirections;
 	private Button bCall;
-	private TextView tvPhone;
 	protected SharedPreferences mSettings;
 	private boolean mDetailsInflated = false;
 	private Business mListing;
@@ -64,14 +63,12 @@ public class ListingDetailActivity extends FragmentActivity {
 		tvTitleText = (TextView) findViewById(R.id.dispensary_title_map);
 		tvReviewCount = (TextView) findViewById(R.id.dispensary_reviews_map);
 		tvDistance = (TextView) findViewById(R.id.dispensary_distance_map);
-		tvHours = (TextView) findViewById(R.id.dispensary_hours_map);
 		tvAddress = (TextView) findViewById(R.id.dispensary_countdown_map);
 		
 		//Image Views
 		ivRating = (ImageView) findViewById(R.id.iv_listing_rating);
 
 		// Details Controls
-		bDirections = (Button) findViewById(R.id.b_dispensary_directions_detail);
 		bCall = (Button) findViewById(R.id.b_dispensary_phone_detail);
 
 		if (getIntent().getExtras() != null) {
@@ -107,7 +104,9 @@ public class ListingDetailActivity extends FragmentActivity {
 		tvAddress.setSelected(true);
         
 		ImageLoader.getInstance().displayImage(b.ratingImageUrl, ivRating);
-
+		
+		bCall.setText(b.displayPhone);
+		bCall.setTextSize(12);
 		bCall.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String number = "tel:" + mListing.phone.trim();
@@ -116,20 +115,6 @@ public class ListingDetailActivity extends FragmentActivity {
 				mContext.startActivity(phoneCallIntent);
 			}
 		});
-
-		bDirections.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-
-				Uri uri = Uri.parse("http://maps.google.com/maps?" + "saddr="
-						+ Double.toString(phoneLocation.getLatitude()) + ","
-						+ Double.toString(phoneLocation.getLongitude()) + "&"
-						+ "daddr=" + dispLocation.getLatitude() + ","
-						+ dispLocation.getLongitude());
-				Intent directionsIntent = new Intent(Intent.ACTION_VIEW, uri);
-				mContext.startActivity(directionsIntent);
-			}
-		});
-
 	}
 
 

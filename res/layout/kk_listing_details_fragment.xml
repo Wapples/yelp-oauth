@@ -105,16 +105,7 @@
                         android:textColor="#333333"
                         android:textSize="13dp" />
 
-                    <TextView
-                        android:id="@+id/dispensary_hours_map"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="1dp"
-                        android:ellipsize="marquee"
-                        android:maxLines="1"
-                        android:text="hours"
-                        android:textColor="#333333"
-                        android:textSize="13dp" />
+       
                 </LinearLayout>
 
             </LinearLayout>
@@ -135,13 +126,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15sp"
                         android:text="Call" />
-
-                    <Button
-                        android:id="@+id/b_dispensary_directions_detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20sp"
-                        android:text="Directions" />
 
        </LinearLayout>
     </LinearLayout>

@@ -78,6 +78,7 @@ public class ListingListArrayAdapater extends ArrayAdapter<Business> {
 		int distance = (int) business.distance.doubleValue();
 
 		viewHolder.addressView.setText(business.streetAddress);
+		viewHolder.addressView.setSelected(true);
 		viewHolder.distanceView.setText(distance + " mi");
 		viewHolder.reviewCountView.setText(business.reviewCount + "");
 		viewHolder.titleView.setText(business.name);

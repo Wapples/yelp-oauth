@@ -22,10 +22,6 @@ public class Query extends Model {
 		this.query = queryString;
 	}
 	
-	 public List<Image> queries() {
-	        return getMany(Image.class, "Query");
-	 }
-	 
 	 public String getQuery(){
 		 return query;
 	 }

@@ -42,6 +42,7 @@ import com.yelpoauth.app.android.helpers.LocationHelper;
 import com.yelpoauth.app.android.helpers.U;
 import com.yelpoauth.app.android.models.Business;
 import com.yelpoauth.app.android.models.BusinessFactory;
+import com.yelpoauth.app.android.models.Query;
 import com.yelpoauth.app.android.oauth.VolleyYelpClient;
 
 /**
@@ -161,6 +162,11 @@ public class ListingListFragment extends ListFragment {
 		if (!mConnectivityManager.isNetworkAvailable()){
 			loadDataFromStorage();
 		}
+		Bundle extras = getArguments();
+		if (extras != null){
+			String queryString = extras.getString("query");
+			search(queryString);
+		}
 		
 //		extras = getArguments();
 //		String queryString = extras.getString("query");
@@ -198,6 +204,8 @@ public class ListingListFragment extends ListFragment {
 
 		// set title
 		mActivity.setTitle("Searching - " + mQuery);
+		
+		Query.storeQuery(mQuery);
 		
 		loadMore();
 	}

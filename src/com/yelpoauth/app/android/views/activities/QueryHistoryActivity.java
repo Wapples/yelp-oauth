@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yelpoauth.app.android.R;
 import com.yelpoauth.app.android.adapters.QueryAdapter;
+import com.yelpoauth.app.android.main.YelpSearchActivity;
 import com.yelpoauth.app.android.models.Query;
 
 import android.app.Activity;
@@ -48,7 +49,7 @@ public class QueryHistoryActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View itemView, int position,
 					long id) {
-				Intent i = new Intent(getApplicationContext(), GoogleImageSearchVolleyActivity.class);
+				Intent i = new Intent(getApplicationContext(), YelpSearchActivity.class);
 				Bundle b = new Bundle();
 				b.putString("query", mQueryList.get(position).getQuery());
 				i.putExtras(b);
